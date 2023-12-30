@@ -44,6 +44,47 @@ So, if you have a row in the Travelers table with flight_num equal to, for examp
 
 It's important to note that JPA and Hibernate take care of these database-level details for you. When you retrieve a Flights entity, JPA/Hibernate will use the foreign key relationship to fetch the associated Travelers entities, and vice versa. You work with Java objects in your code, and the ORM framework handles the translation between Java objects and database tables.
     */
+    /*
+    The choice between using @ManyToOne and @OneToMany annotations in a bidirectional association depends on the direction of the relationship and how you want to navigate it.
+
+@ManyToOne and @OneToMany (Bidirectional): This is used when you want to navigate the association from both sides. It allows you to access the associated entities from both the owning and the inverse side.
+
+Example:
+
+java
+Copy code
+// In Flights entity
+@OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+private List<Travelers> travelers;
+
+// In Travelers entity
+@ManyToOne
+@JoinColumn(name = "flight_num", referencedColumnName = "num")
+private Flights flight;
+@ManyToOne (Unidirectional): This is used when you only need to navigate the association from the owning side. The inverse side won't have a direct reference to the owning side.
+
+Example:
+
+java
+Copy code
+// In Travelers entity
+@ManyToOne
+@JoinColumn(name = "flight_num", referencedColumnName = "num")
+private Flights flight;
+@OneToMany (Unidirectional): This is used when you only need to navigate the association from the inverse side. The owning side won't have a direct reference to the inverse side.
+
+Example:
+
+java
+Copy code
+// In Flights entity
+@OneToMany(cascade = CascadeType.ALL)
+@JoinColumn(name = "flight_num", referencedColumnName = "num")
+private List<Travelers> travelers;
+In many cases, bidirectional associations are chosen for ease of navigation. However, if you only need to navigate the relationship in one direction, you can choose the appropriate unidirectional mapping.
+
+Keep in mind that bidirectional associations come with responsibilities, such as managing both sides of the relationship when updating the database to ensure data consistency.
+    */
     
     
 }
